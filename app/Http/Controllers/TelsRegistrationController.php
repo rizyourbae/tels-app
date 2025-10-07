@@ -7,13 +7,23 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Carbon\Carbon;
+use App\Models\Pendaftaran;
 
 class TelsRegistrationController extends Controller
 {
     // Method untuk menampilkan halaman konfirmasi
     public function create(): View
     {
-        return view('tels.create');
+        $user = Auth::user();
+
+        // Cek apakah user sudah punya pendaftaran aktif untuk tes di masa depan
+        $isAlreadyRegistered = Pendaftaran::where('user_id', $user->id)
+            ->whereHas('jadwalTes', function ($query) {
+                $query->where('tanggal_tes', '>=', Carbon::today());
+            })->exists();
+
+        // Kirim status pendaftaran ke view
+        return view('tels.create', ['isAlreadyRegistered' => $isAlreadyRegistered]);
     }
 
     // Method untuk memproses pendaftaran

@@ -61,17 +61,6 @@
             color: #10B981;
         }
 
-        .card {
-            transition: all 0.3s ease;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -92,19 +81,10 @@
             color: #92400E;
         }
 
-        .tels-card {
-            transition: all 0.3s ease;
-            border-radius: 1rem;
-        }
-
-        .tels-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        }
-
         .dashboard-grid {
             display: grid;
             grid-template-columns: 250px 1fr;
+            min-height: 100vh;
         }
 
         .dashboard-header {
@@ -113,45 +93,6 @@
             border-radius: 1rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-        }
-
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .stat-icon {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .stat-icon.blue {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-        }
-
-        .stat-icon.green {
-            background-color: #D1FAE5;
-            color: #065F46;
-        }
-
-        .stat-icon.yellow {
-            background-color: #FEF3C7;
-            color: #92400E;
         }
 
         @media (max-width: 1024px) {
@@ -195,24 +136,26 @@
 </head>
 
 <body>
-    <div class="dashboard-grid  min-h-screen">
+    <div class="dashboard-grid">
         <div class="sidebar shadow-lg p-4">
             <div class="flex items-center mb-8">
-                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
-                    <i class="fas fa-graduation-cap text-white"></i>
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3">
+                    <img src="{{ asset('assets/img/logo-upb.png') }}" alt="Logo TELS UINSI" class="w-8 h-8">
                 </div>
                 <h1 class="text-xl font-bold text-white">UPB UINSI</h1>
             </div>
 
             <nav>
-                <a href="{{ route('dashboard') }}" class="nav-item active flex items-center px-4 py-3 mb-2">
+                <a href="{{ route('dashboard') }}"
+                    class="nav-item flex items-center px-4 py-3 mb-2 {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i class="fas fa-home mr-3"></i> Dashboard
                 </a>
                 <a href="{{ route('tels.register.create') }}"
-                    class="nav-item flex items-center px-4 py-3 rounded-lg mb-2">
+                    class="nav-item flex items-center px-4 py-3 rounded-lg mb-2 {{ request()->routeIs('tels.register.create') ? 'active' : '' }}">
                     <i class="fas fa-book mr-3"></i> Daftar TELS
                 </a>
-                <a href="{{ route('profile.edit') }}" class="nav-item flex items-center px-4 py-3 rounded-lg mb-2">
+                <a href="{{ route('profile.edit') }}"
+                    class="nav-item flex items-center px-4 py-3 rounded-lg mb-2 {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
                     <i class="fas fa-user mr-3"></i> Profile
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
@@ -284,7 +227,7 @@
 
             @if ($pendaftaran)
                 <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b pb-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500">Tanggal Tes</h3>
                             <p class="mt-1 text-lg font-semibold text-dark">
@@ -304,7 +247,38 @@
                         </div>
                     </div>
 
-                    <div class="text-center">
+                    {{-- ======================================================== --}}
+                    {{-- <<< INI BAGIAN DETAIL SKOR YANG DIMASUKKAN >>> --}}
+                    {{-- ======================================================== --}}
+                    @if ($pendaftaran->status == \App\Enums\PendaftaranStatus::SELESAI)
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 pt-6 border-t border-gray-200">
+                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                <div class="flex justify-center mb-2">
+                                    <i class="fas fa-headphones text-primary text-2xl"></i>
+                                </div>
+                                <h3 class="text-sm font-medium text-gray-500 mb-1">Listening Comprehension</h3>
+                                <p class="text-2xl font-bold text-dark">{{ $pendaftaran->skor_listening }}</p>
+                            </div>
+
+                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                <div class="flex justify-center mb-2">
+                                    <i class="fas fa-sitemap text-primary text-2xl"></i>
+                                </div>
+                                <h3 class="text-sm font-medium text-gray-500 mb-1">Structure & Written Expression</h3>
+                                <p class="text-2xl font-bold text-dark">{{ $pendaftaran->skor_structure }}</p>
+                            </div>
+
+                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                <div class="flex justify-center mb-2">
+                                    <i class="fas fa-book-open text-primary text-2xl"></i>
+                                </div>
+                                <h3 class="text-sm font-medium text-gray-500 mb-1">Reading Comprehension</h3>
+                                <p class="text-2xl font-bold text-dark">{{ $pendaftaran->skor_reading }}</p>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div class="mt-8 pt-6 border-t border-gray-200 text-center">
                         @if ($pendaftaran->status == \App\Enums\PendaftaranStatus::SELESAI)
                             <a href="{{ route('sertifikat.download', ['pendaftaran' => $pendaftaran->id]) }}"
                                 class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg">

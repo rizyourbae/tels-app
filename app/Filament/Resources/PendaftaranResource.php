@@ -81,6 +81,10 @@ class PendaftaranResource extends Resource
                     ->label('Nama Mahasiswa')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('user.program_studi')
+                    ->label('Prodi')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('status')
                     ->badge()
                     // 1. Ubah type-hint dari string menjadi PendaftaranStatus

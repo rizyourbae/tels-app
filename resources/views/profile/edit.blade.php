@@ -27,6 +27,7 @@
             }
         }
     </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -113,10 +114,10 @@
     <div class="dashboard-grid">
         <div class="sidebar shadow-lg p-4">
             <div class="flex items-center mb-8">
-                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
-                    <i class="fas fa-graduation-cap text-white"></i>
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3">
+                    <img src="{{ asset('assets/img/logo-upb.png') }}" alt="Logo TELS UINSI" class="w-8 h-8">
                 </div>
-                <h1 class="text-xl font-bold text-white">TELS UINSI</h1>
+                <h1 class="text-xl font-bold text-white">UPB UINSI</h1>
             </div>
             <nav>
                 <a href="{{ route('dashboard') }}"
@@ -179,6 +180,16 @@
                                 class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                                 required>
                             <x-input-error class="mt-2" :messages="$errors->get('nim')" />
+                        </div>
+                        <div>
+                            <label for="program_studi" class="block text-sm font-medium text-gray-700 mb-2">Program
+                                Studi</label>
+                            <input type="text" id="program_studi" name="program_studi"
+                                value="{{ old('program_studi', Auth::user()->program_studi) }}"
+                                class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg" required>
+                            @error('program_studi')
+                                <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>

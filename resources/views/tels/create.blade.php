@@ -10,6 +10,7 @@
     {{-- Menggunakan CDN, BUKAN VITE --}}
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script>
         tailwind.config = {
             theme: {
@@ -25,6 +26,7 @@
             }
         }
     </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -114,10 +116,10 @@
     <div class="dashboard-grid">
         <div class="sidebar shadow-lg p-4">
             <div class="flex items-center mb-8">
-                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
-                    <i class="fas fa-graduation-cap text-white"></i>
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center mr-3">
+                    <img src="{{ asset('assets/img/logo-upb.png') }}" alt="Logo TELS UINSI" class="w-8 h-8">
                 </div>
-                <h1 class="text-xl font-bold text-white">TELS UINSI</h1>
+                <h1 class="text-xl font-bold text-white">UPB UINSI</h1>
             </div>
             <nav>
                 <a href="{{ route('dashboard') }}"
@@ -143,69 +145,73 @@
         </div>
 
         <div class="p-4 md:p-8 main-content">
-            <div class="flex justify-between items-center mb-8">
-                <div>
-                    <h1 class="text-2xl font-bold text-dark">Dashboard Mahasiswa</h1>
-                    <p class="text-gray-600">Selamat datang, {{ Auth::user()->name }}</p>
-                </div>
-                <div class="flex items-center">
-                    <div class="mr-4 text-right hidden md:block">
-                        <div class="font-medium">{{ Auth::user()->name }}</div>
-                        <div class="text-sm text-gray-600">{{ Auth::user()->nim ?? 'NIM belum diisi' }}</div>
-                    </div>
-                    <div
-                        class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
-                        {{ substr(Auth::user()->name, 0, 1) }}
-                    </div>
-                </div>
-            </div>
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-gray-900">Konfirmasi Pendaftaran TELS</h1>
                 <p class="text-gray-600">Silakan baca aturan pendaftaran sebelum melanjutkan</p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl">
-                <h2 class="text-xl font-bold text-gray-800 mb-6">Aturan Pendaftaran TELS</h2>
-                <ul class="space-y-4 mb-8">
-                    <li class="flex items-start">
-                        <div
-                            class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
-                            <i class="fas fa-check text-green-600 text-sm"></i>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                {{-- [LOGIKA BARU] Cek variabel dari controller --}}
+                @if ($isAlreadyRegistered)
+                    {{-- TAMPILAN JIKA SUDAH TERDAFTAR --}}
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-check-circle text-green-600 text-5xl"></i>
                         </div>
-                        <p class="text-gray-700">Kuota pendaftaran adalah 50 orang per minggu.</p>
-                    </li>
-                    <li class="flex items-start">
-                        <div
-                            class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
-                            <i class="fas fa-check text-green-600 text-sm"></i>
-                        </div>
-                        <p class="text-gray-700">25 pendaftar pertama akan dijadwalkan pada hari Senin.</p>
-                    </li>
-                    <li class="flex items-start">
-                        <div
-                            class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
-                            <i class="fas fa-check text-green-600 text-sm"></i>
-                        </div>
-                        <p class="text-gray-700">25 pendaftar berikutnya akan dijadwalkan pada hari Rabu.</p>
-                    </li>
-                </ul>
-                <p class="text-gray-700 mb-8">
-                    Dengan menekan tombol di bawah, Anda setuju dengan ketentuan dan akan didaftarkan ke jadwal tes yang
-                    tersedia.
-                </p>
-                <form method="POST" action="{{ route('tels.register.store') }}">
-                    @csrf
-                    <div class="flex justify-end space-x-4">
+                        <h2 class="text-2xl font-bold text-dark mb-4">Anda Sudah Terdaftar</h2>
+                        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                            Anda sudah memiliki jadwal tes TELS yang aktif. Silakan periksa dashboard Anda untuk melihat
+                            detail jadwal.
+                        </p>
                         <a href="{{ route('dashboard') }}"
-                            class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
-                            Batal
+                            class="bg-primary hover:bg-secondary text-white px-8 py-4 rounded-lg font-semibold text-lg">
+                            Kembali ke Dashboard
                         </a>
-                        <button type="submit"
-                            class="px-6 py-3 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition duration-300">
-                            Ya, Daftarkan Saya
-                        </button>
                     </div>
-                </form>
+                @else
+                    {{-- TAMPILAN JIKA BELUM TERDAFTAR (KODE LAMA ANDA) --}}
+                    <h2 class="text-xl font-bold text-gray-800 mb-6">Aturan Pendaftaran TELS</h2>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                                <i class="fas fa-check text-green-600 text-sm"></i>
+                            </div>
+                            <p class="text-gray-700">Kuota pendaftaran adalah 50 orang per minggu.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                                <i class="fas fa-check text-green-600 text-sm"></i>
+                            </div>
+                            <p class="text-gray-700">25 pendaftar pertama akan dijadwalkan pada hari Senin.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div
+                                class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                                <i class="fas fa-check text-green-600 text-sm"></i>
+                            </div>
+                            <p class="text-gray-700">25 pendaftar berikutnya akan dijadwalkan pada hari Rabu.</p>
+                        </li>
+                    </ul>
+                    <p class="text-gray-700 mb-8">
+                        Dengan menekan tombol di bawah, Anda setuju dengan ketentuan dan akan didaftarkan ke jadwal tes
+                        yang tersedia.
+                    </p>
+                    <form method="POST" action="{{ route('tels.register.store') }}">
+                        @csrf
+                        <div class="flex justify-end space-x-4">
+                            <a href="{{ route('dashboard') }}"
+                                class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
+                                Batal
+                            </a>
+                            <button type="submit"
+                                class="px-6 py-3 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition duration-300">
+                                Ya, Daftarkan Saya
+                            </button>
+                        </div>
+                    </form>
+                @endif
             </div>
         </div>
     </div>
