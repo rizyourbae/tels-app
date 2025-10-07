@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PendaftaranResource\Pages;
 use App\Models\Pendaftaran;
+use App\Enums\PendaftaranStatus;
 use Filament\Forms\Components\{Section, Select, TextInput};
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -32,7 +33,7 @@ class PendaftaranResource extends Resource
                             ->disabledOn('edit'),
                         Select::make('jadwal_tes_id')
                             ->label('Jadwal Tes')
-                            ->relationship('jadwalTes', 'tanggal_tes') // Anda bisa kustomisasi format ini nanti
+                            ->relationship('jadwalTes', 'tanggal_tes')
                             ->required()
                             ->disabledOn('edit'),
                     ])->columns(2),
@@ -42,16 +43,13 @@ class PendaftaranResource extends Resource
                     ->schema([
                         TextInput::make('jawaban_benar_listening')
                             ->label('Listening (0-50)')
-                            ->numeric()->minValue(0)->maxValue(50)
-                            ->dehydrated(false), // Penting: Agar tidak disimpan langsung ke DB
+                            ->numeric()->minValue(0)->maxValue(50),
                         TextInput::make('jawaban_benar_structure')
                             ->label('Structure (0-40)')
-                            ->numeric()->minValue(0)->maxValue(40)
-                            ->dehydrated(false),
+                            ->numeric()->minValue(0)->maxValue(40),
                         TextInput::make('jawaban_benar_reading')
                             ->label('Reading (0-50)')
-                            ->numeric()->minValue(0)->maxValue(50)
-                            ->dehydrated(false),
+                            ->numeric()->minValue(0)->maxValue(50),
                     ])->columns(3)->hiddenOn('create'),
 
                 Section::make('Hasil Skor Resmi (Otomatis)')
@@ -85,9 +83,11 @@ class PendaftaranResource extends Resource
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'TERDAFTAR' => 'warning',
-                        'SELESAI' => 'success',
+                    // 1. Ubah type-hint dari string menjadi PendaftaranStatus
+                    ->color(fn(PendaftaranStatus $state): string => match ($state) {
+                        // 2. Bandingkan dengan kasus Enum, bukan string
+                        PendaftaranStatus::TERDAFTAR => 'warning',
+                        PendaftaranStatus::SELESAI => 'success',
                     }),
                 TextColumn::make('skor_total')
                     ->numeric()

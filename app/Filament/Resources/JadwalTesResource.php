@@ -8,9 +8,9 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\{DatePicker, TextInput};
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class JadwalTesResource extends Resource
 {
@@ -43,20 +43,22 @@ class JadwalTesResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('tanggal_tes')
+                TextColumn::make('tanggal_tes')
+                    ->label('Tanggal Ujian')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('waktu_mulai'),
-                Tables\Columns\TextColumn::make('lokasi')
+                TextColumn::make('waktu_mulai')
+                    ->label('Waktu Mulai'),
+                TextColumn::make('lokasi')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kuota')
+                TextColumn::make('kuota')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

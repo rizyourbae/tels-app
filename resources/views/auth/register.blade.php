@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TELS APP</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Konfirmasi Pendaftaran - TELS UINSI</title>
+
+    {{-- Menggunakan CDN sesuai permintaan Anda --}}
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -24,272 +26,200 @@
         }
     </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
-            overflow: hidden;
+            background: linear-gradient(135deg, #F0FDF4 0%, #D1FAE5 100%);
+            min-height: 100vh;
         }
 
-        .split-screen {
-            height: 100vh;
-            display: flex;
-        }
-
-        .left-column {
-            width: 50%;
-            position: relative;
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-                url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80') center/cover no-repeat;
-        }
-
-        .logo-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            z-index: 10;
-        }
-
-        .logo {
-            width: 150px;
-            height: 150px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            backdrop-filter: blur(5px);
-        }
-
-        .logo-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .right-column {
-            width: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(249, 250, 251, 0.9);
-        }
-
-        .register-card {
-            width: 100%;
-            max-width: 420px;
-            padding: 2.5rem;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
-            font-size: 1rem;
+        .sidebar {
             transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #065F46;
-            box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1);
-        }
-
-        .register-button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #065F46;
+            background: linear-gradient(to bottom, #065F46, #047857);
             color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+        }
+
+        .nav-item {
+            transition: all 0.2s ease;
+            border-radius: 0.5rem;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #F0FDF4;
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .register-button:hover {
-            background-color: #047857;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(6, 95, 70, 0.2);
+        .nav-item i {
+            transition: all 0.2s ease;
         }
 
-        .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #6B7280;
-            font-size: 0.875rem;
+        .nav-item:hover i {
+            color: #10B981;
         }
 
-        .login-link a {
-            color: #065F46;
-            text-decoration: none;
-            font-weight: 500;
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
         }
 
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #6B7280;
-            font-size: 0.75rem;
-        }
-
-        .error-message {
-            color: #dc2626;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        @media (max-width: 768px) {
-            .split-screen {
-                flex-direction: column;
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
 
-            .left-column {
-                width: 100%;
-                height: 40vh;
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                height: 100%;
+                z-index: 50;
+                overflow-y: auto;
             }
 
-            .right-column {
+            .sidebar.active {
+                left: 0;
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .overlay.active {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
                 width: 100%;
-                height: 60vh;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+
+            .main-content {
+                padding-top: 80px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="split-screen">
-        <!-- Left Column -->
-        <div class="left-column">
-            <div class="logo-container">
-                <div class="logo">
-                    <i class="fas fa-university text-white text-4xl"></i>
+    <div class="dashboard-grid">
+        <div class="sidebar shadow-lg p-4">
+            <div class="flex items-center mb-8">
+                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-graduation-cap text-white"></i>
                 </div>
-                <div class="logo-text">
-                    UIN SULTAN AJI<br>
-                    MUHAMMAD IDRIS<br>
-                    SAMARINDA
-                </div>
+                <h1 class="text-xl font-bold text-white">TELS UINSI</h1>
             </div>
+
+            <nav>
+                {{-- [INTEGRASI] Menambahkan logika untuk 'active' class di menu --}}
+                <a href="{{ route('dashboard') }}"
+                    class="nav-item flex items-center px-4 py-3 mb-2 {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="{{ route('tels.register.create') }}"
+                    class="nav-item flex items-center px-4 py-3 rounded-lg mb-2 {{ request()->routeIs('tels.register.create') ? 'active' : '' }}">
+                    <i class="fas fa-book mr-3"></i> Daftar TELS
+                </a>
+                <a href="{{ route('profile.edit') }}"
+                    class="nav-item flex items-center px-4 py-3 rounded-lg mb-2 {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
+                    <i class="fas fa-user mr-3"></i> Profile
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"
+                        class="nav-item flex items-center w-full px-4 py-3 rounded-lg">
+                        <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                    </a>
+                </form>
+            </nav>
         </div>
 
-        <!-- Right Column -->
-        <div class="right-column">
-            <div class="register-card">
-                <h1 class="text-2xl font-bold text-center mb-2" style="color: #065F46;">Create Your Account</h1>
-                <p class="text-center text-gray-600 mb-6">Join our academic community today</p>
+        <div class="p-4 md:p-8 main-content">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-gray-900">Konfirmasi Pendaftaran TELS</h1>
+                <p class="text-gray-600">Silakan baca aturan pendaftaran sebelum melanjutkan</p>
+            </div>
 
-                <form method="POST" action="{{ route('register') }}">
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Aturan Pendaftaran TELS</h2>
+
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <div
+                            class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                            <i class="fas fa-check text-green-600 text-sm"></i>
+                        </div>
+                        <p class="text-gray-700">Kuota pendaftaran adalah 50 orang per minggu.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <div
+                            class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                            <i class="fas fa-check text-green-600 text-sm"></i>
+                        </div>
+                        <p class="text-gray-700">25 pendaftar pertama akan dijadwalkan pada hari Senin.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <div
+                            class="flex-shrink-0 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                            <i class="fas fa-check text-green-600 text-sm"></i>
+                        </div>
+                        <p class="text-gray-700">25 pendaftar berikutnya akan dijadwalkan pada hari Rabu.</p>
+                    </li>
+                </ul>
+
+                <p class="text-gray-700 mb-8">
+                    Dengan menekan tombol di bawah, Anda setuju dengan ketentuan dan akan didaftarkan ke jadwal tes yang
+                    tersedia.
+                </p>
+
+                {{-- [INTEGRASI] Menghubungkan form ke route dan menambahkan CSRF token --}}
+                <form method="POST" action="{{ route('tels.register.store') }}">
                     @csrf
-
-                    <div class="input-group">
-                        <label class="input-label" for="name">Full Name</label>
-                        <input type="text" id="name" name="name" class="input-field" placeholder="John Doe"
-                            value="{{ old('name') }}" required autofocus autocomplete="name">
-                        <div class="error-message">
-                            <!-- Error message for name will appear here -->
-                        </div>
+                    <div class="flex justify-end space-x-4">
+                        <a href="{{ route('dashboard') }}"
+                            class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
+                            Batal
+                        </a>
+                        <button type="submit"
+                            class="px-6 py-3 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition duration-300">
+                            Ya, Daftarkan Saya
+                        </button>
                     </div>
-
-                    <div class="input-group">
-                        <label class="input-label" for="email">Email Address</label>
-                        <input type="email" id="email" name="email" class="input-field"
-                            placeholder="student@uinsamida.ac.id" value="{{ old('email') }}" required
-                            autocomplete="username">
-                        <div class="error-message">
-                            <!-- Error message for email will appear here -->
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label" for="password">Password</label>
-                        <input type="password" id="password" name="password" class="input-field" placeholder="••••••••"
-                            required autocomplete="new-password">
-                        <div class="error-message">
-                            <!-- Error message for password will appear here -->
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label" for="password_confirmation">Confirm Password</label>
-                        <input type="password" id="password_confirmation" name="password_confirmation"
-                            class="input-field" placeholder="••••••••" required autocomplete="new-password">
-                        <div class="error-message">
-                            <!-- Error message for password confirmation will appear here -->
-                        </div>
-                    </div>
-
-                    <button type="submit" class="register-button">
-                        <i class="fas fa-user-plus mr-2"></i> Register
-                    </button>
                 </form>
-
-                <div class="login-link">
-                    Already have an account? <a href="{{ route('login') }}">Login</a>
-                </div>
-
-                <div class="footer-note">
-                    By registering, you agree to our Terms of Service and Privacy Policy
-                </div>
             </div>
         </div>
     </div>
 
+    {{-- Script untuk mobile sidebar, tidak diubah --}}
     <script>
-        // Example of how you might handle Laravel validation errors
         document.addEventListener('DOMContentLoaded', function() {
-            // This would be populated by Laravel's validation errors
-            const nameError = document.querySelector('#name + .error-message');
-            const emailError = document.querySelector('#email + .error-message');
-            const passwordError = document.querySelector('#password + .error-message');
-            const passwordConfirmationError = document.querySelector('#password_confirmation + .error-message');
-
-            // Example of showing errors
-            const errors = {
-                name: "{{ $errors->first('name') }}",
-                email: "{{ $errors->first('email') }}",
-                password: "{{ $errors->first('password') }}",
-                password_confirmation: "{{ $errors->first('password_confirmation') }}"
-            };
-
-            if (errors.name) {
-                nameError.textContent = errors.name;
-            }
-
-            if (errors.email) {
-                emailError.textContent = errors.email;
-            }
-
-            if (errors.password) {
-                passwordError.textContent = errors.password;
-            }
-
-            if (errors.password_confirmation) {
-                passwordConfirmationError.textContent = errors.password_confirmation;
-            }
+            const sidebarToggle = document.createElement('button');
+            sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            sidebarToggle.className =
+                'lg:hidden fixed top-4 left-4 z-50 bg-primary text-white w-12 h-12 rounded-lg shadow-lg';
+            document.body.appendChild(sidebarToggle);
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            document.body.appendChild(overlay);
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
         });
     </script>
 </body>

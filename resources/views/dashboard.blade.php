@@ -1,209 +1,364 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>Student Dashboard - TELS Portal</title>
-
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+    <title>TELS Dashboard - Mahasiswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#065F46',
+                        secondary: '#047857',
+                        accent: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Custom styles Anda bisa tetap di sini atau dipindah ke app.css */
-        .status-card {
-            transition: all 0.3s ease;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F0FDF4 0%, #D1FAE5 100%);
+            min-height: 100vh;
         }
 
-        .status-card:hover {
+        .sidebar {
+            transition: all 0.3s ease;
+            background: linear-gradient(to bottom, #065F46, #047857);
+            color: white;
+        }
+
+        .nav-item {
+            transition: all 0.2s ease;
+            border-radius: 0.5rem;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #F0FDF4;
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover i {
+            color: #10B981;
+        }
+
+        .card {
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
-        .btn {
-            transition: all 0.3s ease;
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.375rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            gap: 0.5rem;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .status-selesai {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-terdaftar {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .tels-card {
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+        }
+
+        .tels-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #065F46 0%, #047857 100%);
+            color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.blue {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .stat-icon.green {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+
+        .stat-icon.yellow {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                height: 100%;
+                z-index: 50;
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .overlay.active {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+
+            .main-content {
+                padding-top: 80px;
+            }
         }
     </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen font-sans antialiased">
-    <div x-data="{ open: false }" class="w-full">
-        <header class="bg-white shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <a href="{{ route('dashboard') }}" class="flex-shrink-0 flex items-center">
-                            <i class="fas fa-university text-green-700 text-2xl mr-3"></i>
-                            <span class="text-xl font-bold text-gray-900">TELS UINSI Samarinda</span>
-                        </a>
+<body>
+    <div class="dashboard-grid  min-h-screen">
+        <div class="sidebar shadow-lg p-4">
+            <div class="flex items-center mb-8">
+                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-graduation-cap text-white"></i>
+                </div>
+                <h1 class="text-xl font-bold text-white">UPB UINSI</h1>
+            </div>
+
+            <nav>
+                <a href="{{ route('dashboard') }}" class="nav-item active flex items-center px-4 py-3 mb-2">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="{{ route('tels.register.create') }}"
+                    class="nav-item flex items-center px-4 py-3 rounded-lg mb-2">
+                    <i class="fas fa-book mr-3"></i> Daftar TELS
+                </a>
+                <a href="{{ route('profile.edit') }}" class="nav-item flex items-center px-4 py-3 rounded-lg mb-2">
+                    <i class="fas fa-user mr-3"></i> Profile
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"
+                        class="nav-item flex items-center w-full px-4 py-3 rounded-lg">
+                        <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                    </a>
+                </form>
+            </nav>
+        </div>
+
+        <div class="p-4 md:p-8 main-content">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold text-dark">Dashboard Mahasiswa</h1>
+                    <p class="text-gray-600">Selamat datang, {{ Auth::user()->name }}</p>
+                </div>
+                <div class="flex items-center">
+                    <div class="mr-4 text-right hidden md:block">
+                        <div class="font-medium">{{ Auth::user()->name }}</div>
+                        <div class="text-sm text-gray-600">{{ Auth::user()->nim ?? 'NIM belum diisi' }}</div>
                     </div>
-                    <div class="flex items-center">
-                        <div @click.away="open = false" class="ml-3 relative" x-data="{ open: false }">
-                            <div>
-                                <button @click="open = !open"
-                                    class="flex items-center text-sm rounded-full focus:outline-none">
-                                    <span class="mr-3 text-gray-700 hidden sm:inline">Welcome,
-                                        {{ Auth::user()->name }}</span>
-                                    <i class="fas fa-chevron-down text-gray-500"></i>
-                                </button>
-                            </div>
-                            <div x-show="open" x-transition:enter="transition ease-out duration-100"
-                                x-transition:enter-start="transform opacity-0 scale-95"
-                                x-transition:enter-end="transform opacity-100 scale-100"
-                                x-transition:leave="transition ease-in duration-75"
-                                x-transition:leave-start="transform opacity-100 scale-100"
-                                x-transition:leave-end="transform opacity-0 scale-95"
-                                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50">
-                                <a href="{{ route('profile.edit') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <a href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); this.closest('form').submit();"
-                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                        Log Out
-                                    </a>
-                                </form>
-                            </div>
-                        </div>
+                    <div
+                        class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        {{ substr(Auth::user()->name, 0, 1) }}
                     </div>
                 </div>
             </div>
-        </header>
 
-        <main class="py-12">
-            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            @if (session('success'))
+                <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md" role="alert">
+                    <p>{{ session('success') }}</p>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
 
-                {{-- Menampilkan pesan sukses atau error dari session --}}
-                @if (session('success'))
-                    <div class="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md"
-                        role="alert">
-                        <p class="font-bold">Success</p>
-                        <p>{{ session('success') }}</p>
+            <div class="dashboard-header">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Status Pendaftaran TELS</h2>
+                        <p class="text-white text-opacity-80 mt-1">Informasi terbaru tentang pendaftaran dan tes Anda
+                        </p>
                     </div>
-                @endif
-                @if (session('error'))
-                    <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md" role="alert">
-                        <p class="font-bold">Error</p>
-                        <p>{{ session('error') }}</p>
-                    </div>
-                @endif
-
-
-                {{-- [LOGIKA BLADE] Cek apakah mahasiswa sudah terdaftar atau belum --}}
-                @if ($pendaftaran === null)
-
-                    <div class="text-center py-12">
-                        <h1 class="text-3xl font-bold text-gray-900 mb-4">Selamat Datang di Portal TELS</h1>
-
-                        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto status-card">
-                            <div class="flex justify-center mb-6">
-                                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-graduation-cap text-green-600 text-4xl"></i>
-                                </div>
-                            </div>
-
-                            <h2 class="text-2xl font-bold text-gray-900 mb-4">Anda Belum Terdaftar</h2>
-                            <p class="text-gray-600 mb-8">
-                                Segera daftarkan diri Anda untuk tes TELS minggu ini dan dapatkan jadwal Anda secara
-                                otomatis.
-                            </p>
-
-                            <a href="{{ route('tels.register.create') }}"
-                                class="btn inline-flex items-center px-6 py-4 bg-green-700 hover:bg-green-800 text-white font-semibold rounded-lg shadow-md">
-                                <i class="fas fa-edit mr-3"></i> Daftar TELS Sekarang
-                            </a>
-                        </div>
-                    </div>
-                @else
-                    <div class="text-center py-8">
-                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Status Pendaftaran Anda</h1>
-                        <p class="text-gray-600">Detail pendaftaran dan informasi tes Anda.</p>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto status-card">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div class="space-y-6">
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Status Pendaftaran</h3>
-                                    <div class="mt-2">
-                                        @if ($pendaftaran->status == \App\Enums\PendaftaranStatus::TERDAFTAR)
-                                            <span
-                                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                                                <i class="fas fa-clock mr-2"></i> {{ $pendaftaran->status->value }}
-                                            </span>
-                                        @elseif ($pendaftaran->status == \App\Enums\PendaftaranStatus::SELESAI)
-                                            <span
-                                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                                <i class="fas fa-check-circle mr-2"></i>
-                                                {{ $pendaftaran->status->value }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Tanggal Tes</h3>
-                                    <div class="mt-1 text-lg font-medium text-gray-900">
-                                        {{ \Carbon\Carbon::parse($pendaftaran->jadwalTes->tanggal_tes)->translatedFormat('l, d F Y') }}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Waktu</h3>
-                                    <div class="mt-1 text-lg font-medium text-gray-900">
-                                        {{ \Carbon\Carbon::parse($pendaftaran->jadwalTes->waktu_mulai)->format('H:i') }}
-                                        WITA</div>
-                                </div>
-                            </div>
-
-                            <div class="space-y-6">
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Lokasi</h3>
-                                    <div class="mt-1 text-lg font-medium text-gray-900">
-                                        {{ $pendaftaran->jadwalTes->lokasi }}</div>
-                                </div>
-
-                                @if ($pendaftaran->status == \App\Enums\PendaftaranStatus::SELESAI)
-                                    <div>
-                                        <h3 class="text-sm font-medium text-gray-500">Skor Total</h3>
-                                        <div class="mt-1 text-3xl font-bold text-green-600">
-                                            {{ $pendaftaran->skor_total }}</div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="mt-10 pt-6 border-t border-gray-200 text-center">
-                            @if ($pendaftaran->status == \App\Enums\PendaftaranStatus::SELESAI)
-                                {{-- Kita beri # dulu karena route download belum dibuat --}}
-                                <a href="#"
-                                    class="btn inline-flex items-center px-6 py-4 bg-green-700 hover:bg-green-800 text-white font-semibold rounded-lg shadow-md">
-                                    <i class="fas fa-download mr-3"></i> Download Sertifikat
-                                </a>
-                            @else
-                                <span class="inline-block px-4 py-2 text-sm text-gray-500 bg-gray-100 rounded-lg">
-                                    <i class="fas fa-info-circle mr-2"></i> Sertifikat akan tersedia setelah tes
-                                    selesai.
-                                </span>
-                            @endif
-                        </div>
-                    </div>
-
-                @endif
+                    @if ($pendaftaran)
+                        @if ($pendaftaran->status == \App\Enums\PendaftaranStatus::TERDAFTAR)
+                            <span class="status-badge status-terdaftar mt-2 md:mt-0">
+                                <i class="fas fa-clock"></i>
+                                {{ $pendaftaran->status->value }}
+                            </span>
+                        @else
+                            <span class="status-badge status-selesai mt-2 md:mt-0">
+                                <i class="fas fa-check-circle"></i>
+                                {{ $pendaftaran->status->value }}
+                            </span>
+                        @endif
+                    @else
+                        <span class="status-badge bg-gray-200 text-gray-800 mt-2 md:mt-0">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Belum Terdaftar
+                        </span>
+                    @endif
+                </div>
             </div>
-        </main>
+
+            @if ($pendaftaran)
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-b pb-6 mb-6">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Tanggal Tes</h3>
+                            <p class="mt-1 text-lg font-semibold text-dark">
+                                {{ \Carbon\Carbon::parse($pendaftaran->jadwalTes->tanggal_tes)->translatedFormat('l, d F Y') }}
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Waktu & Lokasi</h3>
+                            <p class="mt-1 text-lg font-semibold text-dark">
+                                {{ \Carbon\Carbon::parse($pendaftaran->jadwalTes->waktu_mulai)->format('H:i') }} WITA
+                                di {{ $pendaftaran->jadwalTes->lokasi }}
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Skor Total</h3>
+                            <p class="mt-1 text-3xl font-bold text-primary">{{ $pendaftaran->skor_total ?? '--' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        @if ($pendaftaran->status == \App\Enums\PendaftaranStatus::SELESAI)
+                            <a href="{{ route('sertifikat.download', ['pendaftaran' => $pendaftaran->id]) }}"
+                                class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg">
+                                <i class="fas fa-download mr-2"></i> Download Sertifikat
+                            </a>
+                        @else
+                            <p class="text-gray-500 italic">Sertifikat dan skor detail akan tersedia setelah tes
+                                selesai.</p>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-file-alt text-primary text-5xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-dark mb-4">Anda Belum Terdaftar</h2>
+                    <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                        Saat ini Anda belum memiliki jadwal tes TELS yang aktif. Silakan daftar untuk mendapatkan jadwal
+                        tes Anda.
+                    </p>
+                    <a href="{{ route('tels.register.create') }}"
+                        class="bg-primary hover:bg-secondary text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-lg">
+                        <i class="fas fa-edit mr-2"></i> Daftar TELS Sekarang
+                    </a>
+                </div>
+            @endif
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.createElement('button');
+            sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            sidebarToggle.className =
+                'lg:hidden fixed top-4 left-4 z-50 bg-primary text-white w-12 h-12 rounded-lg shadow-lg';
+            document.body.appendChild(sidebarToggle);
+
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            document.body.appendChild(overlay);
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 
 </html>
