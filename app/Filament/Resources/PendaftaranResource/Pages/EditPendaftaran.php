@@ -40,6 +40,18 @@ class EditPendaftaran extends EditRecord
 
             $data['status'] = PendaftaranStatus::SELESAI;
 
+            // --- INI BAGIAN BARUNYA ---
+            // Generate nomor sertifikat hanya jika belum ada.
+            if (empty($this->record->nomor_sertifikat)) {
+                $bulan = now()->format('m');
+                $tahun = now()->format('Y');
+                // Membuat nomor urut 7 digit dari ID pendaftaran, contoh: 0000001
+                $nomorUrut = str_pad($this->record->id, 7, '0', STR_PAD_LEFT);
+
+                $data['nomor_sertifikat'] = "UPB/B/{$nomorUrut}/Un.21/PP.01.1/{$bulan}/{$tahun}";
+            }
+            // --- AKHIR BAGIAN BARU ---
+
             // --- TAMBAHAN PENTING ---
             // Setelah selesai dipakai, hapus data virtual agar tidak coba disimpan ke database.
             unset($data['jawaban_benar_listening']);
