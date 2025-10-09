@@ -6,6 +6,7 @@ use App\Enums\PendaftaranStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Pendaftaran extends Model
 {
@@ -31,6 +32,16 @@ class Pendaftaran extends Model
         'skor_reading' => 'integer',
         'skor_total' => 'integer',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            if (empty($model->uuid)) {
+                $model->uuid = (string) Str::uuid();
+            }
+        });
+    }
 
     public function user(): BelongsTo
     {

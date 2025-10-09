@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1deb3
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Oct 08, 2025 at 02:20 PM
+-- Host: localhost
+-- Generation Time: Oct 09, 2025 at 07:55 AM
 -- Server version: 8.0.43-0ubuntu0.24.04.2
 -- PHP Version: 8.3.6
 
@@ -38,8 +38,8 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('laravel-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3', 'i:1;', 1759932689),
-('laravel-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3:timer', 'i:1759932689;', 1759932689),
+('laravel-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3', 'i:1;', 1759981269),
+('laravel-cache-livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3:timer', 'i:1759981269;', 1759981269),
 ('laravel-cache-spatie.permission.cache', 'a:3:{s:5:\"alias\";a:0:{}s:11:\"permissions\";a:0:{}s:5:\"roles\";a:0:{}}', 1760019029);
 
 -- --------------------------------------------------------
@@ -91,7 +91,8 @@ CREATE TABLE `jadwal_tes` (
 --
 
 INSERT INTO `jadwal_tes` (`id`, `tanggal_tes`, `waktu_mulai`, `lokasi`, `kuota`, `created_at`, `updated_at`) VALUES
-(1, '2025-10-13', '08:00:00', 'Laboratorium Bahasa', 25, '2025-10-06 19:26:08', '2025-10-06 19:26:08');
+(1, '2025-10-13', '08:00:00', 'Laboratorium Bahasa', 25, '2025-10-06 19:26:08', '2025-10-06 19:26:08'),
+(2, '2025-10-20', '13:30:00', 'LAB UPT UPB UINSI', 25, '2025-10-08 23:26:07', '2025-10-08 23:26:07');
 
 -- --------------------------------------------------------
 
@@ -154,7 +155,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2025_10_06_143713_create_pendaftarans_table', 3),
 (8, '2025_10_07_021746_add_nim_to_users_table', 4),
 (9, '2025_10_07_132609_add_program_studi_to_users_table', 5),
-(10, '2025_10_08_140424_add_nomor_sertifikat_to_pendaftarans_table', 6);
+(10, '2025_10_08_140424_add_nomor_sertifikat_to_pendaftarans_table', 6),
+(11, '2025_10_09_005735_add_uuid_to_pendaftarans_table', 7);
 
 -- --------------------------------------------------------
 
@@ -187,7 +189,8 @@ CREATE TABLE `model_has_roles` (
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 1),
 (3, 'App\\Models\\User', 2),
-(3, 'App\\Models\\User', 3);
+(3, 'App\\Models\\User', 3),
+(3, 'App\\Models\\User', 4);
 
 -- --------------------------------------------------------
 
@@ -209,7 +212,8 @@ CREATE TABLE `password_reset_tokens` (
 
 CREATE TABLE `pendaftarans` (
   `id` bigint UNSIGNED NOT NULL,
-  `nomor_sertifikat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nomor_sertifikat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_id` bigint UNSIGNED NOT NULL,
   `jadwal_tes_id` bigint UNSIGNED NOT NULL,
   `status` enum('TERDAFTAR','SELESAI') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'TERDAFTAR',
@@ -225,8 +229,8 @@ CREATE TABLE `pendaftarans` (
 -- Dumping data for table `pendaftarans`
 --
 
-INSERT INTO `pendaftarans` (`id`, `nomor_sertifikat`, `user_id`, `jadwal_tes_id`, `status`, `skor_listening`, `skor_structure`, `skor_reading`, `skor_total`, `created_at`, `updated_at`) VALUES
-(2, 'UPB/B/0000002/Un.21/PP.01.1/10/2025', 2, 1, 'SELESAI', 63, 54, 48, 550, '2025-10-06 19:36:55', '2025-10-08 06:10:46');
+INSERT INTO `pendaftarans` (`id`, `uuid`, `nomor_sertifikat`, `user_id`, `jadwal_tes_id`, `status`, `skor_listening`, `skor_structure`, `skor_reading`, `skor_total`, `created_at`, `updated_at`) VALUES
+(2, 'c912a439-43ae-4917-8985-4bdbca2f9fdd', 'UPB/B/0000002/Un.21/PP.01.1/10/2025', 2, 1, 'SELESAI', 63, 54, 48, 550, '2025-10-06 19:36:55', '2025-10-08 17:16:14');
 
 -- --------------------------------------------------------
 
@@ -460,10 +464,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('MrylWRRbhbaK0B9ymKMHAS6FvvmgIUNKmPs6uRS3', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVjNGT1Jpa3AxNUozSGtlb3lXMjZYOGg1TXlYbTRHb2xEWmo5T0t5NSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyNzoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL2FkbWluIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1759932836),
-('tUbz7G9CvMjfqbY1xTsjV4ywbpWYRPP4UMDpxm7o', 1, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoiYnJjc0FGampoTm1IejZSV3RNc2NWb1RJNmRYendZbEc3QUw4bDlQTSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjQwOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYWRtaW4vcGVuZGFmdGFyYW5zIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjE3OiJwYXNzd29yZF9oYXNoX3dlYiI7czo2MDoiJDJ5JDEyJEZ2TkplREUuNElVV3A3S0V1LmJYRmVDTm9xNHFldFQ4Mlk3eE9YYWtzblFTZEljZlR5ckZTIjtzOjg6ImZpbGFtZW50IjthOjA6e319', 1759932648),
-('tXrOOSZVRlk8Q9mCgLkbe64R8VcLEpiNPBnYXPqr', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiV0NBdkR1MjhhS2ZacEVGeDJvSW8weVJ4MEhVQmFkcmh0ZkNMQXpaaiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbi9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1759932836),
-('ZAkRv1CzXgNarm0023MRhpsMi6TcL0JTkh0vomm1', 2, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWFpzQWFOQk8yWVlkYTM2TXc1Wmd6N3pkWFdwVUtiTTMzblYweXA4VyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjQzOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvc2VydGlmaWthdC8yL2Rvd25sb2FkIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjt9', 1759933106);
+('ASmYSOsi3LEPBzRVRpavar6i25y7oW5hpnzDMOer', NULL, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiRFE0c1c0VW1jcTZmTW9yY25nR2Y2SXlac2ZIT1lqclhHbUNCSHByYSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9sb2dpbiI7fX0=', 1759996404),
+('uK5ym7ZpCgSiRb8CgQXNscVCpKvPr6uNRf0Fpnt6', 1, '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoibmRXVUZkU2t2cVZvTWpJZjJEdFR2MjFZZGl0amUyaWZ3V0RGQm9hWSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjQwOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYWRtaW4vcGVuZGFmdGFyYW5zIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjE3OiJwYXNzd29yZF9oYXNoX3dlYiI7czo2MDoiJDJ5JDEyJEZ2TkplREUuNElVV3A3S0V1LmJYRmVDTm9xNHFldFQ4Mlk3eE9YYWtzblFTZEljZlR5ckZTIjtzOjg6ImZpbGFtZW50IjthOjA6e319', 1759995611);
 
 -- --------------------------------------------------------
 
@@ -475,7 +477,7 @@ CREATE TABLE `users` (
   `id` bigint UNSIGNED NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `nim` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `program_studi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `program_studi` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -491,7 +493,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `nim`, `program_studi`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Admin UPB', NULL, NULL, 'upb@uinsi.ac.id', NULL, '$2y$12$FvNJeDE.4IUWp7KEu.bXFeCNoq4qetT82Y7xOXaksnQSdIcfTyrFS', NULL, '2025-10-06 06:30:22', '2025-10-06 06:30:22'),
 (2, 'Rizqi Saputra', '1715025092', 'Tadris Bahasa Inggris', 'rizqi@uinsi.ac.id', NULL, '$2y$12$jVl8x7I5uYjHZn2rMzZhm.yz3QacEnijCYXen0jk0ktnGk.AB.b/u', NULL, '2025-10-06 07:36:13', '2025-10-07 05:33:03'),
-(3, 'Rojali Gagak', '1715025096', NULL, 'rojaliyahud123@yahoo.com', NULL, '$2y$12$x6ccxpueHee4xslPHgm0MunzLbU3IRT/Lgdg/vuCtGRaHpzsv1HFy', NULL, '2025-10-06 18:34:42', '2025-10-06 18:34:42');
+(3, 'Rojali Gagak', '1715025096', NULL, 'rojaliyahud123@yahoo.com', NULL, '$2y$12$x6ccxpueHee4xslPHgm0MunzLbU3IRT/Lgdg/vuCtGRaHpzsv1HFy', NULL, '2025-10-06 18:34:42', '2025-10-06 18:34:42'),
+(4, 'John Doe', '1715025087', 'Manajemen Bisnis Syariah', 'john@uinsi.ac.id', NULL, '$2y$12$.5icXlPeMc6RWmnVGgaB6uGhnGXpSO6Di8H0QeOSwFhfeRyXqpzo2', NULL, '2025-10-08 19:42:32', '2025-10-08 19:42:32');
 
 --
 -- Indexes for dumped tables
@@ -567,6 +570,7 @@ ALTER TABLE `password_reset_tokens`
 ALTER TABLE `pendaftarans`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `pendaftarans_nomor_sertifikat_unique` (`nomor_sertifikat`),
+  ADD UNIQUE KEY `pendaftarans_uuid_unique` (`uuid`),
   ADD KEY `pendaftarans_user_id_foreign` (`user_id`),
   ADD KEY `pendaftarans_jadwal_tes_id_foreign` (`jadwal_tes_id`);
 
@@ -627,7 +631,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `jadwal_tes`
 --
 ALTER TABLE `jadwal_tes`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -639,7 +643,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `pendaftarans`
@@ -669,7 +673,7 @@ ALTER TABLE `score_conversions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

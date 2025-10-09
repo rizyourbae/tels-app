@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\JadwalTesResource\Pages;
 
 use App\Filament\Resources\JadwalTesResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListJadwalTes extends ListRecords
@@ -13,7 +13,9 @@ class ListJadwalTes extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make()
+                ->label('Jadwal Tes')
+                ->icon('heroicon-o-document-plus'),
         ];
     }
 }

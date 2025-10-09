@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\TelsRegistrationController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\CertificateVerificationController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -15,6 +16,8 @@ Route::get('/', function () {
     // Jika belum login, arahkan ke halaman login
     return redirect()->route('login');
 });
+
+Route::get('/sertifikat/verify/{uuid}', [CertificateVerificationController::class, 'show'])->name('sertifikat.verify');
 
 Route::get('/dashboard', [StudentDashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'role:Mahasiswa'])->name('dashboard');

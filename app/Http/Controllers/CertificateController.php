@@ -6,6 +6,7 @@ use App\Models\Pendaftaran;
 use Illuminate\Support\Facades\Auth;
 use setasign\Fpdi\Fpdi;
 use Carbon\Carbon;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class CertificateController extends Controller
 {
@@ -23,8 +24,24 @@ class CertificateController extends Controller
         $pdf->AddPage('L', 'A4'); // A4 Landscape: 297mm width, 210mm height
         $pdf->useTemplate($templateId);
 
-        // --- Mulai Mengisi Data dengan Koordinat Baru ---
+        // 1. Buat URL Verifikasi (SEBELUM RETURN)
+        $verificationUrl = route('sertifikat.verify', ['uuid' => $pendaftaran->uuid]);
 
+        // 2. Generate Gambar QR Code dan simpan sementara
+        $qrCodePath = storage_path('app/public/qrcodes/' . $pendaftaran->uuid . '.png');
+        if (!file_exists(storage_path('app/public/qrcodes'))) {
+            mkdir(storage_path('app/public/qrcodes'), 0755, true);
+        }
+        QrCode::format('png')->size(80)->generate($verificationUrl, $qrCodePath);
+
+        // 3. Tempelkan QR Code ke PDF menggunakan koordinat
+        //    Format: Image(path, X, Y, width)
+        $pdf->Image($qrCodePath, 240, 70, 25); // Koordinat X=35, Y=168, Lebar=25mm
+
+        // 4. Hapus file QR code sementara
+        unlink($qrCodePath);
+
+        // --- Mulai Mengisi Data dengan Koordinat Baru ---
         $pdf->SetTextColor(0, 0, 0); // Warna hitam
 
         // Nomor Sertifikat (UPB/B/...)

@@ -1,0 +1,151 @@
+body {
+    font-family: "Inter", sans-serif;
+    overflow: hidden;
+}
+
+.split-screen {
+    height: 100vh;
+    display: flex;
+}
+
+.left-column {
+    width: 50%;
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("https://www.uinsi.ac.id/wp-content/uploads/2024/12/880CFB39-E5BA-4978-81B3-93092AAD6763.jpeg")
+            center/cover no-repeat;
+}
+
+.logo-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 10;
+}
+
+.logo {
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    backdrop-filter: blur(5px);
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.right-column {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(249, 250, 251, 0.9);
+    overflow-y: auto;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #065f46;
+    box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1);
+}
+
+.register-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #065f46;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.register-button:hover {
+    background-color: #047857;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(6, 95, 70, 0.2);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.login-link a {
+    color: #065f46;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .split-screen {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left-column {
+        width: 100%;
+        height: 40vh;
+        min-height: 250px;
+    }
+
+    .right-column {
+        width: 100%;
+        height: auto;
+        padding: 2rem 1rem;
+    }
+}

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Account Settings - TELS UINSI</title>
-
+    <title>TELS UINSI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/profile-edit.css') }}">
 
     <script>
         tailwind.config = {
@@ -28,86 +28,7 @@
         }
     </script>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F0FDF4 0%, #D1FAE5 100%);
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            transition: all 0.3s ease;
-            background: linear-gradient(to bottom, #065F46, #047857);
-            color: white;
-        }
-
-        .nav-item {
-            transition: all 0.2s ease;
-            border-radius: 0.5rem;
-        }
-
-        .nav-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #F0FDF4;
-        }
-
-        .nav-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-weight: 600;
-        }
-
-        .input-field:focus {
-            border-color: #065F46;
-            box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1);
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            min-height: 100vh;
-        }
-
-        @media (max-width: 1024px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: fixed;
-                left: -250px;
-                top: 0;
-                height: 100%;
-                z-index: 50;
-                overflow-y: auto;
-            }
-
-            .sidebar.active {
-                left: 0;
-            }
-
-            .overlay {
-                display: none;
-            }
-
-            .overlay.active {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 40;
-            }
-
-            .main-content {
-                padding-top: 80px;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -271,30 +192,7 @@
     </div>
 
     {{-- Script untuk mobile sidebar --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebarToggle = document.createElement('button');
-            sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            sidebarToggle.className =
-                'lg:hidden fixed top-4 left-4 z-50 bg-primary text-white w-12 h-12 rounded-lg shadow-lg';
-            document.body.appendChild(sidebarToggle);
-
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            document.body.appendChild(overlay);
-
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-            });
-
-            overlay.addEventListener('click', function() {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-            });
-        });
-    </script>
+    <script src="{{ asset('assets/js/profile-edit.js') }}"></script>
 </body>
 
 </html>

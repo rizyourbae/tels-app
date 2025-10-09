@@ -7,6 +7,7 @@ use App\Models\ScoreConversion;
 use App\Enums\PendaftaranStatus;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Notifications\Notification;
 
 class EditPendaftaran extends EditRecord
 {
@@ -17,6 +18,19 @@ class EditPendaftaran extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title('Sukses')
+            ->body('Berhasil Merubah Data');
     }
 
     // --- TAMBAHKAN METHOD BARU INI ---
